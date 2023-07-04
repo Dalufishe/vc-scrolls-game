@@ -54,10 +54,11 @@ export default class ViewerCore {
 
     window.addEventListener(
         'resize',
-        function () {
+        () => {
           this.camera.aspect = window.innerWidth / window.innerHeight
           this.camera.updateProjectionMatrix()
           this.renderer.setSize(window.innerWidth, window.innerHeight)
+          this.render()
         },
         false
     )
