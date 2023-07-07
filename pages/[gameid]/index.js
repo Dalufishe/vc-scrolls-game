@@ -8,8 +8,9 @@ import Viewer from "../../components/pages/GamePage/Viewer/Viewer";
 import nrrd from "../../constant/nrrd";
 import { cx } from "@emotion/css";
 
-export default function index() {
-  const idArray = useRef([]);
+export default function Index() {
+
+  const idArray = useRef([0]);
   const [currentIdIndex, setCurrentIdIndex] = useState(0);
 
   useEffect(() => {

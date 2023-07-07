@@ -9,7 +9,7 @@ import Menu from "../components/pages/HomePage/Menu/Menu";
  * * "../components/pages/HomePage"
  */
 
-export default function index() {
+export default function Index() {
   return (
     <div
       className={cx(
