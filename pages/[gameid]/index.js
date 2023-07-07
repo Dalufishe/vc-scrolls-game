@@ -35,11 +35,7 @@ export default function index() {
 
   return (
     <div className="relative">
-      <Viewer
-        id={0}
-        a={idArray.current[currentIdIndex]}
-        className={"relative"}
-      />
+      <Viewer id={idArray.current[currentIdIndex]} className={"relative"} />
       <div
         className={cx(
           "absolute bottom-20 left-[50%] translate-x-[-50%]",
