@@ -19,19 +19,16 @@ export default class ViewerCore {
     this.clip = null;
 
     this.render = this.render.bind(this);
+    this.canvas = document.querySelector("#test");
     this.inverseBoundsMatrix = new THREE.Matrix4();
     this.cmtextures = {
       viridis: new THREE.TextureLoader().load(textureViridis.src),
     };
-
-    this.init();
   }
 
-  init() {
-    const canvas = document.querySelector("#test");
-
+  async init() {
     // renderer setup
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, canvas: this.canvas });
     // this.renderer = new THREE.WebGLRenderer({ antialias: true })
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -65,12 +62,13 @@ export default class ViewerCore {
       false
     );
 
-    const controls = new OrbitControls(this.camera, canvas);
+    const controls = new OrbitControls(this.camera, this.canvas);
     // const controls = new OrbitControls(camera, renderer.domElement)
     controls.addEventListener("change", this.render);
 
     // volume pass to render the volume data
     this.volumePass = new FullScreenQuad(new VolumeMaterial());
+    this.volumeMeta = await fetch("volume/meta.json").then((res) => res.json());
   }
 
   async updateID(id) {
@@ -78,7 +76,6 @@ export default class ViewerCore {
       this.volumeTex.dispose();
     }
 
-    this.volumeMeta = await fetch("volume/meta.json").then((res) => res.json());
     this.volumeTarget = this.volumeMeta.nrrd[id];
     this.clip = this.volumeTarget.clip;
     this.nrrd = this.volumeTarget.shape;

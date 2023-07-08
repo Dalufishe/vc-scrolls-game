@@ -8,12 +8,14 @@ export default function Viewer({ id, className }) {
   const viewer = useRef(null);
 
   useEffect(() => {
-    viewer.current = new ViewerCore();
-  }, [])
-
-  useEffect(() => {
-    if (viewer.current) {
+    if (!viewer.current) {
+      viewer.current = new ViewerCore();
+      viewer.current.init()
+        .then(() => viewer.current.updateID(id))
+        .then(() => console.log(`id ${id} is loaded`))
+    } else {
       viewer.current.updateID(id)
+        .then(() => console.log(`id ${id} is loaded`))
     }
   }, [id])
 
