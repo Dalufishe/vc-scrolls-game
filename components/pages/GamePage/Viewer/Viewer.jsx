@@ -15,7 +15,7 @@ export default function Viewer({ id, className }) {
     if (viewer.current) {
       viewer.current.updateID(id)
     }
-  }, [viewer.current, id])
+  }, [id])
 
   return (
     <div className={className}>
