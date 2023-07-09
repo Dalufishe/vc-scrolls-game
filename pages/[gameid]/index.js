@@ -7,9 +7,9 @@ import { useEffect, useRef, useState } from "react";
 import Viewer from "../../components/pages/GamePage/Viewer/Viewer";
 import nrrd from "../../constant/nrrd";
 import { cx } from "@emotion/css";
+import ConfirmBtn from "../../components/pages/GamePage/ConfirmBtn/ConfirmBtn";
 
 export default function Index() {
-
   const idArray = useRef([0]);
   const [currentIdIndex, setCurrentIdIndex] = useState(0);
 
@@ -17,7 +17,6 @@ export default function Index() {
     for (let i = 1; i < 10; i++) {
       idArray.current[i] = Math.floor(Math.random() * nrrd.count);
     }
-    console.log(idArray.current);
   }, []);
 
   const handleNext = () => {
@@ -27,29 +26,37 @@ export default function Index() {
       setCurrentIdIndex(currentIdIndex + 1);
     }
   };
-  const handlePrev = () => {
-    if (currentIdIndex <= 0) setCurrentIdIndex(0);
-    else {
-      setCurrentIdIndex(currentIdIndex - 1);
-    }
-  };
 
   return (
-    <div className="relative">
-      <Viewer id={idArray.current[currentIdIndex]} className={"relative"} />
+    <div>
+      <Viewer id={idArray.current[currentIdIndex]} />
+      {/* floating dom elements */}
       <div
         className={cx(
-          "absolute bottom-20 left-[50%] translate-x-[-50%]",
+          "fixed top-16 left-[50%] translate-x-[-50%]",
+          "w-[90%]",
+          "text-3xl",
+          "flex flex-col items-center justify-center gap-1",
+          "bg-m1.5",
+          "p-3",
+          "rounded-lg",
+          "font-bold"
+        )}
+      >
+        <h5 className={cx("text-xl text-c1 font-normal")}>
+          - round {currentIdIndex + 1} -
+        </h5>
+        <h3>- Guess if the following scroll has any inscriptions -</h3>
+      </div>
+      <div
+        className={cx(
+          "fixed bottom-16 left-[50%] translate-x-[-50%]",
           "flex gap-20",
           "text-3xl"
         )}
       >
-        <button onClick={handlePrev} className="border border-m2 p-3">
-          Prev
-        </button>
-        <button onClick={handleNext} className="border border-m2 p-3">
-          Next
-        </button>
+        <ConfirmBtn onClick={handleNext}>No</ConfirmBtn>
+        <ConfirmBtn onClick={handleNext}>Yes</ConfirmBtn>
       </div>
     </div>
   );

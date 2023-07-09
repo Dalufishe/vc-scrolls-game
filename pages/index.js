@@ -54,7 +54,12 @@ export default function Index() {
       <ul className={cx("flex", "text-xl text-m2", "flex items-center gap-2")}>
         <li>
           <button>
-            <AiFillGithub />
+            <a
+              href="https://github.com/Dalufishe/vc-scrolls-game"
+              target="_blank"
+            >
+              <AiFillGithub />
+            </a>
           </button>
         </li>
         <li>

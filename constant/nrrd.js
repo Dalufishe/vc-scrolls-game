@@ -1,5 +1,5 @@
 const nrrd = {
-  count: 789,
+  count: 20,
 };
 
 export default nrrd;

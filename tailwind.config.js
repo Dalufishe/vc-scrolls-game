@@ -15,7 +15,9 @@ module.exports = {
       colors: {
         c1: "#F5653F",
         m1: colors.gray[900],
+        "m1.5": colors.gray[800],
         m2: colors.gray[300],
+        "m2.5": colors.gray[200],
         m3: colors.gray[100],
       },
     },
