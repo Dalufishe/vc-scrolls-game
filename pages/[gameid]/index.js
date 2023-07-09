@@ -14,21 +14,21 @@ export default function Index() {
   const [currentIdIndex, setCurrentIdIndex] = useState(0);
 
   useEffect(() => {
-    for (let i = 0; i < 10; i++) {
+    for (let i = 1; i < 10; i++) {
       idArray.current[i] = Math.floor(Math.random() * nrrd.count);
     }
     console.log(idArray.current);
   }, []);
 
-  const handlePrev = () => {
-    if (currentIdIndex === idArray.current.length)
+  const handleNext = () => {
+    if (currentIdIndex >= idArray.current.length - 1)
       setCurrentIdIndex(idArray.current.length - 1);
     else {
       setCurrentIdIndex(currentIdIndex + 1);
     }
   };
-  const handleNext = () => {
-    if (currentIdIndex < 0) setCurrentIdIndex(0);
+  const handlePrev = () => {
+    if (currentIdIndex <= 0) setCurrentIdIndex(0);
     else {
       setCurrentIdIndex(currentIdIndex - 1);
     }
