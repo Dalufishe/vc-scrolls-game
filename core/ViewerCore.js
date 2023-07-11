@@ -46,7 +46,7 @@ export default class ViewerCore {
       0.1,
       50
     );
-    this.camera.position.set(0.4, -0.4, -1.0);
+    this.camera.position.copy(new THREE.Vector3(0.4, -0.4, -1.0).multiplyScalar(1.5));
     this.camera.up.set(0, -1, 0);
     this.camera.far = 5;
     this.camera.updateProjectionMatrix();
