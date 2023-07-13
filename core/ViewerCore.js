@@ -4,6 +4,7 @@ import { FullScreenQuad } from "three/examples/jsm/postprocessing/Pass.js";
 import { NRRDLoader } from "three/examples/jsm/loaders/NRRDLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { VolumeMaterial } from "./VolumeMaterial.js";
+import firebase from "../utils/firebase";
 
 export default class ViewerCore {
   constructor() {
@@ -28,7 +29,10 @@ export default class ViewerCore {
 
   async init() {
     // renderer setup
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, canvas: this.canvas });
+    this.renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      canvas: this.canvas,
+    });
     // this.renderer = new THREE.WebGLRenderer({ antialias: true })
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -90,31 +94,36 @@ export default class ViewerCore {
     matrix.compose(center, quat, scaling);
     this.inverseBoundsMatrix.copy(matrix).invert();
 
-    await new NRRDLoader()
-      .loadAsync("volume/" + this.volumeTarget.id + ".nrrd")
-      .then((volume) => {
-        this.volumeTex = new THREE.Data3DTexture(
-          volume.data,
-          volume.xLength,
-          volume.yLength,
-          volume.zLength
-        );
+    // firebase-storage
+    const storage = firebase
+      .storage()
+      .ref("scrolls/"+ this.volumeTarget.id + ".nrrd");
 
-        this.volumeTex.format = THREE.RedFormat;
-        this.volumeTex.type = THREE.FloatType;
-        this.volumeTex.minFilter = THREE.LinearFilter;
-        this.volumeTex.magFilter = THREE.LinearFilter;
-        this.volumeTex.unpackAlignment = 1;
-        this.volumeTex.needsUpdate = true;
+    const nrrdUrl = await storage.getDownloadURL();
 
-        const material = this.volumePass.material;
-        material.uniforms.voldata.value = this.volumeTex;
-        material.uniforms.size.value.set(
-          volume.xLength,
-          volume.yLength,
-          volume.zLength
-        );
-      });
+    await new NRRDLoader().loadAsync(nrrdUrl).then((volume) => {
+      this.volumeTex = new THREE.Data3DTexture(
+        volume.data,
+        volume.xLength,
+        volume.yLength,
+        volume.zLength
+      );
+
+      this.volumeTex.format = THREE.RedFormat;
+      this.volumeTex.type = THREE.FloatType;
+      this.volumeTex.minFilter = THREE.LinearFilter;
+      this.volumeTex.magFilter = THREE.LinearFilter;
+      this.volumeTex.unpackAlignment = 1;
+      this.volumeTex.needsUpdate = true;
+
+      const material = this.volumePass.material;
+      material.uniforms.voldata.value = this.volumeTex;
+      material.uniforms.size.value.set(
+        volume.xLength,
+        volume.yLength,
+        volume.zLength
+      );
+    });
 
     this.render();
   }
